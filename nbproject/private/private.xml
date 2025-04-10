@@ -3,7 +3,13 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/music/OneDrive/Documents/Github/QuanLyKhoDienThoai/src/config/JDBCUtil.java</file>
+            <file>file:/C:/Users/MSI%20GF63/OneDrive%20-%20ptit.edu.vn/CODE/SQA/SOA_QuanLyKhoDienThoai/test/DAO/NhaCungCapDAOTest.java</file>
+            <file>file:/C:/Users/MSI%20GF63/OneDrive%20-%20ptit.edu.vn/CODE/SQA/SOA_QuanLyKhoDienThoai/test/DAO/KhuVucKhoDAOTest.java</file>
+            <file>file:/C:/Users/MSI%20GF63/OneDrive%20-%20ptit.edu.vn/CODE/SQA/SOA_QuanLyKhoDienThoai/test/DAO/ThongKeDAOTest.java</file>
+            <file>file:/C:/Users/MSI%20GF63/OneDrive%20-%20ptit.edu.vn/CODE/SQA/SOA_QuanLyKhoDienThoai/test/DAO/KhachHangDAOTest.java</file>
+            <file>file:/C:/Users/MSI%20GF63/OneDrive%20-%20ptit.edu.vn/CODE/SQA/SOA_QuanLyKhoDienThoai/src/DTO/KhachHangDTO.java</file>
+            <file>file:/C:/Users/MSI%20GF63/OneDrive%20-%20ptit.edu.vn/CODE/SQA/SOA_QuanLyKhoDienThoai/src/DAO/ThongKeDAO.java</file>
+            <file>file:/C:/Users/MSI%20GF63/OneDrive%20-%20ptit.edu.vn/CODE/SQA/SOA_QuanLyKhoDienThoai/src/DTO/ThongKe/ThongKeKhachHangDTO.java</file>
         </group>
     </open-files>
 </project-private>
