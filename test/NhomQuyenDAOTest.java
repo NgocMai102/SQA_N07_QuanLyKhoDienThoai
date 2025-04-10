@@ -10,6 +10,7 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import static config.JDBCUtil.*;
 import java.sql.*; 
 
 /**
@@ -24,13 +25,18 @@ public class NhomQuyenDAOTest {
     }
     
     @BeforeClass
-    public static void setUpClass() {
+    public static void setUpClass() throws SQLException {
         dao = new NhomQuyenDAO();
+        connection = getConnection();
+        connection.setAutoCommit(false);
         
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        connection.rollback(); // Roll back all changes made during tests
+        connection.setAutoCommit(true);
+        connection.close();
     }
 
     /**
