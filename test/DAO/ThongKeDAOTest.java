@@ -4,8 +4,11 @@
  */
 package DAO;
 
+import DTO.ThongKe.ThongKeDoanhThuDTO;
 import DTO.ThongKe.ThongKeKhachHangDTO;
 import DTO.ThongKe.ThongKeNhaCungCapDTO;
+import DTO.ThongKe.ThongKeTheoThangDTO;
+import DTO.ThongKe.ThongKeTungNgayTrongThangDTO;
 import static config.JDBCUtil.getConnection;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -179,6 +182,127 @@ public class ThongKeDAOTest {
         System.out.println("TCS05 - Số lượng khách hàng trong 10 năm qua: " + result.size());
     }
 
+    @Test
+    public void test_TC12_ThangHopLe() {
+        ArrayList<ThongKeTheoThangDTO> result = dao.getThongKeTheoThang(3);
+        assertNotNull(result);
+        assertTrue(result.size() > 0);
+    }
+
+    @Test(expected = Exception.class)
+    public void test_TC13_ThangKhongHopLe() {
+        dao.getThongKeTheoThang(13);
+    }
+
+    @Test
+    public void test_TC14_ThangCoDuLieuRong() {
+        ArrayList<ThongKeTheoThangDTO> result = dao.getThongKeTheoThang(2);
+        assertNotNull(result);
+        assertTrue(result.size() >= 0); // Có thể rỗng hoặc có dữ liệu
+    }
+
+    @Test(expected = Exception.class)
+    public void test_TC15_ThangNull() {
+        dao.getThongKeTheoThang(0);
+    }
+    
+    @Test
+    public void test_TC16_ThangVaNamHopLe() {
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKeTungNgayTrongThang(3, 2024);
+        assertNotNull(result);
+        assertTrue(result.size() > 0);
+    }
+
+    @Test(expected = Exception.class)
+    public void test_TC17_ThangKhongHopLe() {
+        dao.getThongKeTungNgayTrongThang(13, 2024);
+    }
+
+    @Test(expected = Exception.class)
+    public void test_TC18_NamKhongHopLe() {
+        dao.getThongKeTungNgayTrongThang(3, -2024);
+    }
+
+    @Test
+    public void test_TC19_ThangNull() {
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKeTungNgayTrongThang(0, 2024);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void test_TC20_NamNull() {
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKeTungNgayTrongThang(3, 0);
+        assertTrue(result.isEmpty());
+    }
+    
+    @Test
+    public void test_TC21_CoDayDu7Ngay() {
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKe7NgayGanNhat();
+        assertNotNull(result);
+        assertTrue(result.size() <= 7);
+        assertTrue(result.size() > 0); // Có dữ liệu
+    }
+
+    @Test
+    public void test_TC22_KhongDayDu7Ngay() {
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKe7NgayGanNhat();
+        assertNotNull(result);
+        assertTrue(result.size() >= 0); // Có thể ít hơn 7
+    }
+
+    @Test
+    public void test_TC23_CSDLTrong() {
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKe7NgayGanNhat();
+        assertNotNull(result);
+        // Nếu CSDL trống thì:
+        assertTrue(result.isEmpty() || result.size() <= 7);
+    }
+    
+    @Test
+    public void test_TC24_NgayHopLe() throws Exception {
+        String start = "01/01/2024";
+        String end = "01/04/2024";
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKeTuNgayDenNgay(start, end);
+        assertNotNull(result);
+        assertTrue(result.size() > 0);
+    }
+
+    @Test(expected = Exception.class)
+    public void test_TC25_StartKhongHopLe() throws Exception {
+        String start = "30/02/2024";
+        String end = "01/04/2024";
+        dao.getThongKeTuNgayDenNgay(start, end);
+    }
+
+    @Test(expected = Exception.class)
+    public void test_TC26_EndKhongHopLe() throws Exception {
+        Date start = sdf.parse("01/01/2024");
+        Date end = sdf.parse("30/02/2024");
+        dao.getThongKeTuNgayDenNgay(start, end);
+    }
+
+    @Test(expected = Exception.class)
+    public void test_TC27_EndNhoHonStart() throws Exception {
+        Date start = sdf.parse("01/04/2024");
+        Date end = sdf.parse("01/01/2024");
+        dao.getThongKeTuNgayDenNgay(start, end);
+    }
+
+    @Test
+    public void test_TC28_EndThieu() throws Exception {
+        Date start = sdf.parse("01/01/2024");
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKeTuNgayDenNgay(start, null);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void test_TC29_StartThieu() throws Exception {
+        Date end = sdf.parse("01/04/2024");
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKeTuNgayDenNgay(null, end);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
 
     /**
      * Test of getThongKeTheoThang method, of class ThongKeDAO.
