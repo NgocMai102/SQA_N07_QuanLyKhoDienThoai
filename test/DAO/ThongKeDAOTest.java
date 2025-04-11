@@ -276,21 +276,21 @@ public class ThongKeDAOTest {
 
     @Test(expected = Exception.class)
     public void test_TC26_EndKhongHopLe() throws Exception {
-        Date start = sdf.parse("01/01/2024");
-        Date end = sdf.parse("30/02/2024");
+        String start = "01/01/2024";
+        String end = "30/02/2024";
         dao.getThongKeTuNgayDenNgay(start, end);
     }
 
     @Test(expected = Exception.class)
     public void test_TC27_EndNhoHonStart() throws Exception {
-        Date start = sdf.parse("01/04/2024");
-        Date end = sdf.parse("01/01/2024");
+        String start = "01/04/2024";
+        String end = "01/01/2024";
         dao.getThongKeTuNgayDenNgay(start, end);
     }
 
     @Test
     public void test_TC28_EndThieu() throws Exception {
-        Date start = sdf.parse("01/01/2024");
+        String start = "01/01/2024";
         ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKeTuNgayDenNgay(start, null);
         assertNotNull(result);
         assertTrue(result.isEmpty());
@@ -298,7 +298,7 @@ public class ThongKeDAOTest {
 
     @Test
     public void test_TC29_StartThieu() throws Exception {
-        Date end = sdf.parse("01/04/2024");
+        String end = "01/04/2024";
         ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKeTuNgayDenNgay(null, end);
         assertNotNull(result);
         assertTrue(result.isEmpty());
