@@ -5,22 +5,44 @@
 package DAO;
 
 import DTO.ThuocTinhSanPham.MauSacDTO;
+import static config.JDBCUtil.getConnection;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import org.junit.After;
 import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+import org.junit.Before;
+import java.sql.Connection;
 
 /**
  *
  * @author Maii
  */
 public class MauSacDAOTest {
+    private Connection conn;
+    MauSacDAO dao;
     
     public MauSacDAOTest() {
     }
     
+    @Before
+    public void setUp() throws SQLException {
+        conn = getConnection();
+        conn.setAutoCommit(false);
+        dao = new MauSacDAO();
+    }
+    
     @AfterClass
     public static void tearDownClass() {
+    }
+    
+    @After
+    public void tearDown() throws Exception {
+        if (conn != null) {
+            conn.rollback(); // rollback các thay đổi
+            conn.close();
+        }
     }
 
     /**
