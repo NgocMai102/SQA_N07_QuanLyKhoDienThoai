@@ -42,8 +42,8 @@ public class DanhMucChucNangDAOTest {
     
 
     @Test
-    public void testSelectAllDanhMucChucNang_WithData() {
-        // Giả sử đã có sẵn dữ liệu hợp lệ trong DB
+    public void testSelectAllDanhMucChucNang_WithData_TT001() {
+        // TT001_Giả sử đã có sẵn dữ liệu hợp lệ trong DB
 
         List<DanhMucChucNangDTO> result = dao.selectAll();
 
@@ -54,15 +54,14 @@ public class DanhMucChucNangDAOTest {
         assertNotNull(first.getMachucnang());
         assertNotNull(first.getTenchucnang());
     }
+    
+    @Test
+    public void testSelectAllDanhMucChucNang_NoValidRecords_TT002() {
+        // TT002_Trường hợp này giả sử CSDL không có bản ghi hợp lệ nào
 
-//    @Test
-//    public void testSelectAllDanhMucChucNang_NoValidRecords() {
-//        // Trường hợp này giả sử CSDL không có bản ghi hợp lệ nào
-//
-//        // Cần đảm bảo DB không chứa dữ liệu hoặc chỉ chứa dữ liệu không hợp lệ
-//        List<DanhMucChucNangDTO> result = dao.selectAll();
-//
-//        assertNotNull("Danh sách không được null");
-//        assertEquals("Danh sách phải rỗng", 0, result.size());
-//    }
+        List<DanhMucChucNangDTO> result = dao.selectAll();
+
+        assertNotNull("Danh sách không được null");
+        assertEquals("Danh sách phải rỗng", 0, result.size());
+    }
 }
