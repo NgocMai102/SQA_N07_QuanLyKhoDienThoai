@@ -60,7 +60,7 @@ public class ThongKeDAOTest {
     SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
     @Test
-    public void test_TCS01_TenRong_ThoiGianHopLe() throws Exception {
+    public void testThongKe_NCC038() throws Exception {
         Date start = sdf.parse("01/01/2024");
         Date end = sdf.parse("01/04/2024");
 
@@ -72,7 +72,7 @@ public class ThongKeDAOTest {
     }
 
     @Test
-    public void test_TCS02_TenTonTai_ThoiGianHopLe() throws Exception {
+    public void testThongKe_NCC039() throws Exception {
         Date start = sdf.parse("01/01/2024");
         Date end = sdf.parse("01/04/2024");
 
@@ -86,7 +86,7 @@ public class ThongKeDAOTest {
     }
 
     @Test
-    public void test_TCS03_TenKhongTonTai_ThoiGianHopLe() throws Exception {
+    public void testThongKe_NCC040() throws Exception {
         Date start = sdf.parse("01/01/2024");
         Date end = sdf.parse("01/04/2024");
 
@@ -97,7 +97,7 @@ public class ThongKeDAOTest {
     }
 
     @Test
-    public void test_TCS04_ThoiGianKhongHopLe() throws Exception {
+    public void testThongKe_NCC041() throws Exception {
         Date start = sdf.parse("01/04/2024");
         Date end = sdf.parse("01/01/2024");
 
@@ -109,7 +109,7 @@ public class ThongKeDAOTest {
     }
 
     @Test
-    public void test_TCS05_ThoiGianRatLon() throws Exception {
+    public void testThongKe_NCC042() throws Exception {
         Date start = sdf.parse("01/01/2014");
         Date end = sdf.parse("01/04/2024");
 
@@ -124,7 +124,7 @@ public class ThongKeDAOTest {
      */
 
     @Test
-    public void test2_TCS01_TenRong_ThoiGianHopLe() throws Exception {
+    public void testThongKe_KH032() throws Exception {
         Date start = sdf.parse("01/01/2024");
         Date end = sdf.parse("01/04/2024");
 
@@ -135,7 +135,7 @@ public class ThongKeDAOTest {
     }
 
     @Test
-    public void test2_TCS02_TenTonTai_ThoiGianHopLe() throws Exception {
+    public void testThongKe_KH033() throws Exception {
         Date start = sdf.parse("01/01/2024");
         Date end = sdf.parse("01/04/2024");
 
@@ -149,7 +149,7 @@ public class ThongKeDAOTest {
     }
 
     @Test
-    public void test2_TCS03_TenKhongTonTai_ThoiGianHopLe() throws Exception {
+    public void testThongKe_KH034() throws Exception {
         Date start = sdf.parse("01/01/2024");
         Date end = sdf.parse("01/04/2024");
 
@@ -160,7 +160,7 @@ public class ThongKeDAOTest {
     }
 
     @Test
-    public void test2_TCS04_ThoiGianKhongHopLe() throws Exception {
+    public void testThongKe_KH035() throws Exception {
         Date start = sdf.parse("01/04/2024");
         Date end = sdf.parse("01/01/2024");
 
@@ -172,7 +172,7 @@ public class ThongKeDAOTest {
     }
 
     @Test
-    public void test2_TCS05_ThoiGianRatLon() throws Exception {
+    public void testThongKe_KH036() throws Exception {
         Date start = sdf.parse("01/01/2014");
         Date end = sdf.parse("01/04/2024");
 
@@ -322,6 +322,4 @@ public class ThongKeDAOTest {
     /**
      * Test of getThongKeTuNgayDenNgay method, of class ThongKeDAO.
      */
-    
-    
 }
