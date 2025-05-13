@@ -228,4 +228,5 @@ public class SanPhamDAO implements DAOinterface<SanPhamDTO> {
         }
         return result;
     }
+
 }
