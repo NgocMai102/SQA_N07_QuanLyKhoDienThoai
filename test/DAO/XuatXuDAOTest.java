@@ -46,120 +46,120 @@ public class XuatXuDAOTest {
         }
     }
 
-//    /**
-//     * Test of insert method, of class XuatXuDAO.
-//     */
-//    // TT_128: Đủ thông tin hợp lệ
-//    @Test
-//    public void testInsert_DuThongTin_TT_128() {
-//        XuatXuDTO dto = new XuatXuDTO(0, "Nhật Bản");
-//        int result = dao.insert(dto);
-//        assertEquals(1, result); // Thành công
-//    }
-//
-//    // TT_129: Mã đã tồn tại
-//    @Test
-//    public void testInsert_MaDaTonTai_TT_129() {
-//        XuatXuDTO dto = new XuatXuDTO(1, "Nhật Bản"); // Giả sử mã 1 đã có
-//        int result = dao.insert(dto);
-//        assertEquals(0, result); // Không thêm được vì trùng mã
-//    }
-//
-//    // TT_130: Mã không hợp lệ (âm)
-//    @Test
-//    public void testInsert_MaKhongHopLe_TT_130() {
-//        XuatXuDTO dto = new XuatXuDTO(-1, "Nhật Bản");
-//        int result = dao.insert(dto);
-//        assertEquals(0, result); // Không thêm được
-//    }
-//
-//    // TT_131: Tên null
-//    @Test(expected = Exception.class)
-//    public void testInsert_ThieuTen_TT_131() {
-//        XuatXuDTO dto = new XuatXuDTO(0, null);
-//        dao.insert(dto); // Gây exception
-//    }
+    /**
+     * Test of insert method, of class XuatXuDAO.
+     */
+    // TT_128: Đủ thông tin hợp lệ
+    @Test
+    public void testInsert_DuThongTin_TT_128() {
+        XuatXuDTO dto = new XuatXuDTO(0, "Nhật Bản");
+        int result = dao.insert(dto);
+        assertEquals(1, result); // Thành công
+    }
+
+    // TT_129: Mã đã tồn tại
+    @Test
+    public void testInsert_MaDaTonTai_TT_129() {
+        XuatXuDTO dto = new XuatXuDTO(1, "Nhật Bản"); // Giả sử mã 1 đã có
+        int result = dao.insert(dto);
+        assertEquals(0, result); // Không thêm được vì trùng mã
+    }
+
+    // TT_130: Mã không hợp lệ (âm)
+    @Test
+    public void testInsert_MaKhongHopLe_TT_130() {
+        XuatXuDTO dto = new XuatXuDTO(-1, "Nhật Bản");
+        int result = dao.insert(dto);
+        assertEquals(0, result); // Không thêm được
+    }
+
+    // TT_131: Tên null
+    @Test(expected = Exception.class)
+    public void testInsert_ThieuTen_TT_131() {
+        XuatXuDTO dto = new XuatXuDTO(0, null);
+        dao.insert(dto); // Gây exception
+    }
 
 
-//    /**
-//     * Test of update method, of class XuatXuDAO.
-//     */
-//    // TT_132: Mã tồn tại, cập nhật hợp lệ
-//    @Test
-//    public void testUpdate_TonTai_TT_132() {
-//        XuatXuDTO dto = new XuatXuDTO(1, "Hồng Kông");
-//        int result = dao.update(dto);
-//        assertEquals(1, result); // Cập nhật thành công
-//    }
-//
-//    // TT_133: Mã không tồn tại
-//    @Test
-//    public void testUpdate_KhongTonTai_TT_133() {
-//        XuatXuDTO dto = new XuatXuDTO(-1, "Nhật Bản"); // Mã không có trong DB
-//        int result = dao.update(dto);
-//        assertEquals(0, result); // Không có gì được cập nhật
-//    }
-//
-//    // TT_135: Thiếu dữ liệu (maId null) – giả định bạn truyền kiểu String (nếu là int thì không có null)
-//    @Test(expected = IllegalArgumentException.class)
-//    public void testUpdate_MaIdNull_TT_134() {
-//        XuatXuDTO dto = new XuatXuDTO(1, null); // Nếu bạn dùng kiểu Integer
-//        dao.update(dto);
-//    }
+    /**
+     * Test of update method, of class XuatXuDAO.
+     */
+    // TT_132: Mã tồn tại, cập nhật hợp lệ
+    @Test
+    public void testUpdate_TonTai_TT_132() {
+        XuatXuDTO dto = new XuatXuDTO(1, "Hồng Kông");
+        int result = dao.update(dto);
+        assertEquals(1, result); // Cập nhật thành công
+    }
+
+    // TT_133: Mã không tồn tại
+    @Test
+    public void testUpdate_KhongTonTai_TT_133() {
+        XuatXuDTO dto = new XuatXuDTO(-1, "Nhật Bản"); // Mã không có trong DB
+        int result = dao.update(dto);
+        assertEquals(0, result); // Không có gì được cập nhật
+    }
+
+    // TT_135: Thiếu dữ liệu (maId null) – giả định bạn truyền kiểu String (nếu là int thì không có null)
+    @Test(expected = IllegalArgumentException.class)
+    public void testUpdate_MaIdNull_TT_134() {
+        XuatXuDTO dto = new XuatXuDTO(1, null); // Nếu bạn dùng kiểu Integer
+        dao.update(dto);
+    }
 
     
-//    /**
-//     * Test of delete method, of class XuatXuDAO.
-//     */
-//    // TT_135: Xóa với mã tồn tại
-//    @Test
-//    public void testDelete_TT_135() {
-//        int result = dao.delete("1");
-//        assertEquals(1, result);
-//    }
-//
-//    // TT_136: Xóa với mã không tồn tại
-//    @Test
-//    public void testDelete_TT_136() {
-//        int result = dao.delete("9999");
-//        assertEquals(0, result);
-//    }
-//
-//    // TT_137: Xóa với mã không hợp lệ
-//    @Test(expected = IllegalArgumentException.class)
-//    public void testDelete_TT_137() {
-//        dao.delete("-1");
-//    }
-//
-//    // TT_138: Xóa với mã null
-//    @Test(expected = NullPointerException.class)
-//    public void testDelete_TT_138() {
-//        dao.delete(null);
-//    }
+    /**
+     * Test of delete method, of class XuatXuDAO.
+     */
+    // TT_135: Xóa với mã tồn tại
+    @Test
+    public void testDelete_TT_135() {
+        int result = dao.delete("1");
+        assertEquals(1, result);
+    }
+
+    // TT_136: Xóa với mã không tồn tại
+    @Test
+    public void testDelete_TT_136() {
+        int result = dao.delete("9999");
+        assertEquals(0, result);
+    }
+
+    // TT_137: Xóa với mã không hợp lệ
+    @Test(expected = IllegalArgumentException.class)
+    public void testDelete_TT_137() {
+        dao.delete("-1");
+    }
+
+    // TT_138: Xóa với mã null
+    @Test(expected = NullPointerException.class)
+    public void testDelete_TT_138() {
+        dao.delete(null);
+    }
 
 
     /**
      * Test of selectAll method, of class XuatXuDAO.
      */
-//    // TT_139: selectAll khi DB trống
-//    @Test
-//    public void testSelectAll_TT_139() {
-//        ArrayList<XuatXuDTO> list = dao.selectAll();
-//        assertNotNull(list);
-//        assertEquals(0, list.size());
-//    }
-//
-//    // TT_140: selectAll khi DB có dữ liệu
-//    @Test
-//    public void testSelectAll_TT_140() {
-//        ArrayList<XuatXuDTO> list = dao.selectAll();
-//        assertNotNull(list);
-//        assertTrue(list.size() > 0);
-//    }
-//
-//    /**
-//     * Test of selectById method, of class XuatXuDAO.
-//     */
+    // TT_139: selectAll khi DB trống
+    @Test
+    public void testSelectAll_TT_139() {
+        ArrayList<XuatXuDTO> list = dao.selectAll();
+        assertNotNull(list);
+        assertEquals(0, list.size());
+    }
+
+    // TT_140: selectAll khi DB có dữ liệu
+    @Test
+    public void testSelectAll_TT_140() {
+        ArrayList<XuatXuDTO> list = dao.selectAll();
+        assertNotNull(list);
+        assertTrue(list.size() > 0);
+    }
+
+    /**
+     * Test of selectById method, of class XuatXuDAO.
+     */
     // TT_141: Mã Id tồn tại
     @Test
     public void testSelectById_TT_141() {
@@ -187,18 +187,21 @@ public class XuatXuDAOTest {
     }
 
     
-//    /**
-//     * Test of getAutoIncrement method, of class XuatXuDAO.
-//     */
-//    @Test
-//    public void testGetAutoIncrement() {
-//        System.out.println("getAutoIncrement");
-//        XuatXuDAO instance = new XuatXuDAO();
-//        int expResult = 0;
-//        int result = instance.getAutoIncrement();
-//        assertEquals(expResult, result);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
+    /**
+     * Test of getAutoIncrement method, of class XuatXuDAO.
+     */
+    // TT_145: Cơ sở dữ liệu có dữ liệu - trả về Auto Increment hiện tại
+    @Test
+    public void testGetAutoIncrement_CoDuLieu_TT_145() {
+        int autoIncrement = dao.getAutoIncrement();
+        assertTrue(autoIncrement > 1); // Vì đã có dữ liệu trước
+    }
+
+    // TT_146: Cơ sở dữ liệu rỗng - trả về giá trị mặc định là 1
+    @Test
+    public void testGetAutoIncrement_KhongDuLieu_TT_146() {
+        int autoIncrement = dao.getAutoIncrement();
+        assertEquals(1, autoIncrement); // Giá trị mặc định là 1
+    }
     
 }
