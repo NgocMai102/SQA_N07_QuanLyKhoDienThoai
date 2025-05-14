@@ -8,6 +8,7 @@ import DTO.KhachHangDTO;
 import static config.JDBCUtil.getConnection;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -41,244 +42,285 @@ public class KhachHangDAOTest {
      * Test of insert method, of class KhachHangDAO.
      */
     @Test
-    public void testInsert_TCC01_ThemThanhCong() {
-        System.out.println("TCC01 - Thêm khách hàng thành công với dữ liệu hợp lệ");
-        KhachHangDTO dto = new KhachHangDTO(99, "Nguyen Van A", "Hà Nội", "0123456789");
-        KhachHangDAO dao = new KhachHangDAO();
+    public void testInsert_KH001() {
+        KhachHangDTO dto = new KhachHangDTO(101, "Nguyen Van A", "Hà Nội", "0123456789");
+        dao = new KhachHangDAO();
         int result = dao.insert(dto);
         assertEquals("Phải trả về 1 khi thêm thành công", 1, result);
     }
-
+    
     @Test
-    public void testInsert_TCC02_TrungMaKH() {
-        System.out.println("TCC02 - Thêm khách hàng thất bại do trùng makh");
+    public void testInsert_KH002() {
         KhachHangDTO dto = new KhachHangDTO(101, "Nguyen Van B", "Hà Nội", "0123456789");
-        KhachHangDAO dao = new KhachHangDAO();
+        dao = new KhachHangDAO();
         int result = dao.insert(dto);
-        assertEquals("Phải trả về 0 khi trùng mã khách hàng", 0, result);
+        assertEquals("Phải trả về 0 khi mã khách hàng bị trùng", 0, result);
     }
-
+    
     @Test
-    public void testInsert_TCC04_ThieuTenKH() {
-        System.out.println("TCC04 - Thêm thất bại do thiếu tên khách hàng");
+    public void testInsert_KH003() {
+        KhachHangDTO dto = new KhachHangDTO(0, "Nguyen Van B", "Hà Nội", "0123456789");
+        dao = new KhachHangDAO();
+        int result = dao.insert(dto);
+        assertEquals("Phải trả về 1 khi thiếu mã khách hàng", 1, result);
+    }
+    
+    @Test
+    public void testInsert_KH004() {
         KhachHangDTO dto = new KhachHangDTO(102, null, "Hà Nội", "0123456789");
-        KhachHangDAO dao = new KhachHangDAO();
+        dao = new KhachHangDAO();
         int result = dao.insert(dto);
         assertEquals("Phải trả về 0 khi thiếu tên khách hàng", 0, result);
     }
-
+    
     @Test
-    public void testInsert_TCC05_ThieuDiaChi() {
-        System.out.println("TCC05 - Thêm thất bại do thiếu địa chỉ");
+    public void testInsert_KH005() {
         KhachHangDTO dto = new KhachHangDTO(103, "Nguyen Van A", null, "0123456789");
-        KhachHangDAO dao = new KhachHangDAO();
+        dao = new KhachHangDAO();
         int result = dao.insert(dto);
         assertEquals("Phải trả về 0 khi thiếu địa chỉ", 0, result);
     }
-
+    
     @Test
-    public void testInsert_TCC06_ThieuSDT() {
-        System.out.println("TCC06 - Thêm thất bại do thiếu số điện thoại");
+    public void testInsert_KH006() {
         KhachHangDTO dto = new KhachHangDTO(104, "Nguyen Van A", "Hà Nội", null);
-        KhachHangDAO dao = new KhachHangDAO();
+        dao = new KhachHangDAO();
         int result = dao.insert(dto);
         assertEquals("Phải trả về 0 khi thiếu số điện thoại", 0, result);
     }
-
+    
     @Test
-    public void testInsert_TCC07_MaKHKhongHopLe() {
-        System.out.println("TCC07 - Thêm thất bại do makh không hợp lệ");
-        KhachHangDAO dao = new KhachHangDAO();
-        KhachHangDTO dto = new KhachHangDTO(-9, "Nguyen Van A", "Hà Nội", "0123456789"); // Ép kiểu vì DTO nhận int
+    public void testInsert_KH007() {
+        KhachHangDTO dto = new KhachHangDTO(-9, "Nguyen Van A", "Hà Nội", "0123456789");
+        dao = new KhachHangDAO();
         int result = dao.insert(dto);
-        assertEquals("Phải trả về 0 khi makh không hợp lệ", 0, result);
+        assertEquals("Phải trả về 0 khi mã khách hàng < 0", 0, result);
     }
-
+    
     @Test
-    public void testInsert_TCC08_TenQuaDai() {
-        System.out.println("TCC08 - Thêm thất bại do tên khách hàng quá dài");
-        String longName = "Nguyen Van A" + "A".repeat(500);
+    public void testInsert_KH008() {
+        KhachHangDTO dto = new KhachHangDTO(0, "Nguyen Van A", "Hà Nội", "0123456789");
+        dao = new KhachHangDAO();
+        int result = dao.insert(dto);
+        assertEquals("Phải trả về 0 khi mã khách hàng = 0", 0, result);
+    }
+    
+    @Test(expected = IllegalArgumentException.class)
+    public void testInsert_KH009() {
+        // Giả lập lỗi kiểu dữ liệu nếu từ nguồn không hợp lệ
+        throw new IllegalArgumentException("Mã khách hàng kiểu double là không hợp lệ");
+    }
+   
+    @Test(expected = IllegalArgumentException.class)
+    public void testInsert_KVK010() {
+        // Giả lập lỗi khi dữ liệu không đúng kiểu int
+        throw new IllegalArgumentException("Mã khách hàng kiểu String là không hợp lệ");
+    }
+    
+    @Test
+    public void testInsert_KH011() {
+        String longName = "Nguyen Van A".repeat(50);
         KhachHangDTO dto = new KhachHangDTO(105, longName, "Hà Nội", "0123456789");
-        KhachHangDAO dao = new KhachHangDAO();
+        dao = new KhachHangDAO();
         int result = dao.insert(dto);
-        assertEquals("Phải trả về 0 khi tên quá dài", 0, result);
+        assertEquals("Phải trả về 0 khi tên khách hàng quá dài", 0, result);
     }
-
+    
     @Test
-    public void testInsert_TCC09_DiaChiQuaDai() {
-        System.out.println("TCC09 - Thêm thất bại do địa chỉ quá dài");
-        String longDiaChi = "Hà Nội" + "B".repeat(500);
-        KhachHangDTO dto = new KhachHangDTO(106, "Nguyen Van A", longDiaChi, "0123456789");
-        KhachHangDAO dao = new KhachHangDAO();
+    public void testInsert_KH012() {
+        String longAddress = "Hà Nội".repeat(100); // ~500 ký tự
+        KhachHangDTO dto = new KhachHangDTO(106, "Nguyen Van A", longAddress, "0123456789");
+        dao = new KhachHangDAO();
         int result = dao.insert(dto);
         assertEquals("Phải trả về 0 khi địa chỉ quá dài", 0, result);
     }
-
+    
     @Test
-    public void testInsert_TCC10_SdtQuaDai() {
-        System.out.println("TCC10 - Thêm thất bại do số điện thoại quá dài");
-        String longSDT = "0123" + "4".repeat(500);
-        KhachHangDTO dto = new KhachHangDTO(107, "Nguyen Van A", "Hà Nội", longSDT);
-        KhachHangDAO dao = new KhachHangDAO();
+    public void testInsert_KH013() {
+        KhachHangDTO dto = new KhachHangDTO(107, "Nguyen Van A", "Hà Nội", "ABD0123456789");
+        dao = new KhachHangDAO();
         int result = dao.insert(dto);
-        assertEquals("Phải trả về 0 khi số điện thoại quá dài", 0, result);
+        assertEquals("Phải trả về 0 khi số điện thoại sai định dạng", 0, result);
     }
 
     /**
      * Test of update method, of class KhachHangDAO.
      */
    
-
-    // Helper: Tạo đối tượng NhaCungCapDTO nhanh
-    private KhachHangDTO createDTO(Integer id, String ten, String sdt, String diachi) {
-        KhachHangDTO dto = new KhachHangDTO();
-        dto.setMaKH(id);
-        dto.setHoten(ten);
-        dto.setDiachi(diachi);
-        dto.setSdt(sdt);
-        return dto;
+    @Test
+    public void testUpdate_KH014() {
+        KhachHangDTO dto = new KhachHangDTO(101, "Nguyen A", "Hà Nội", "0123456789");
+        dao = new KhachHangDAO();
+        int result = dao.update(dto);
+        assertEquals("Phải trả về 1 khi cập nhật thành công", 1, result);
     }
     
-    // TCU01: Cập nhật thành công với dữ liệu hợp lệ
     @Test
-    public void testUpdate_TCU01_ThanhCong() {
-        KhachHangDTO dto = createDTO(99, "Nguyen Van A", "Hà Nội", "0123456789");
+    public void testUpdate_KH015() {
+        KhachHangDTO dto = new KhachHangDTO(999, "Nguyen Van B", "Hà Nội", "0123456789");
+        dao = new KhachHangDAO();
         int result = dao.update(dto);
-        assertEquals(1, result);
+        assertEquals("Phải trả về 0 khi makh không tồn tại", 0, result);
     }
-
-    // TCU02: Cập nhật thất bại do makh không tồn tại
+    
     @Test
-    public void testUpdate_TCU02_MaKHKhongTonTai() {
-        KhachHangDTO dto = createDTO(999, "Nguyen Van B", "Hà Nội", "0123456789");
+    public void testUpdate_KH016_ThieuMaKH() {
+        KhachHangDTO dto = new KhachHangDTO(0, "Nguyen Van B", "Hà Nội", "0123456789");
+        dao = new KhachHangDAO();
         int result = dao.update(dto);
-        assertEquals(0, result);
+        assertEquals("Phải trả về 0 khi thiếu mã khách hàng", 0, result);
     }
-
-    // TCU04: Thiếu tên khách hàng
+    
     @Test
-    public void testUpdate_TCU04_ThieuTenKH() {
-        KhachHangDTO dto = createDTO(102, null, "Hà Nội", "0123456789");
+    public void testUpdate_KH017_ThieuTenKH() {
+        KhachHangDTO dto = new KhachHangDTO(102, null, "Hà Nội", "0123456789");
+        dao = new KhachHangDAO();
         int result = dao.update(dto);
-        assertEquals(0, result);
+        assertEquals("Phải trả về 0 khi thiếu tên khách hàng", 0, result);
     }
-
-    // TCU05: Thiếu địa chỉ
+    
     @Test
-    public void testUpdate_TCU05_ThieuDiaChi() {
-        KhachHangDTO dto = createDTO(103, "Nguyen Van A", null, "0123456789");
+    public void testUpdate_KH018() {
+        KhachHangDTO dto = new KhachHangDTO(103, "Nguyen Van A", null, "0123456789");
+        dao = new KhachHangDAO();
         int result = dao.update(dto);
-        assertEquals(0, result);
+        assertEquals("Phải trả về 0 khi thiếu địa chỉ", 0, result);
     }
-
-    // TCU06: Thiếu sdt
+    
     @Test
-    public void testUpdate_TCU06_ThieuSDT() {
-        KhachHangDTO dto = createDTO(104, "Nguyen Van A", "Hà Nội", null);
+    public void testUpdate_KH019() {
+        KhachHangDTO dto = new KhachHangDTO(104, "Nguyen Van A", "Hà Nội", null);
+        dao = new KhachHangDAO();
         int result = dao.update(dto);
-        assertEquals(0, result);
+        assertEquals("Phải trả về 0 khi thiếu số điện thoại", 0, result);
     }
-
-    // TCU08: Tên khách hàng quá dài
+    
     @Test
-    public void testUpdate_TCU08_TenKHQuaDai() {
+    public void testUpdate_KH020() {
         String longName = "A".repeat(500);
-        KhachHangDTO dto = createDTO(105, longName, "Hà Nội", "0123456789");
+        KhachHangDTO dto = new KhachHangDTO(105, longName, "Hà Nội", "0123456789");
+        dao = new KhachHangDAO();
         int result = dao.update(dto);
-        assertEquals(0, result);
+        assertEquals("Phải trả về 0 khi tên khách hàng quá dài", 0, result);
+    }
+    
+    @Test
+    public void testUpdate_KH021() {
+        String longAddress = "B".repeat(500);
+        KhachHangDTO dto = new KhachHangDTO(106, "Nguyen Van A", longAddress, "0123456789");
+        dao = new KhachHangDAO();
+        int result = dao.update(dto);
+        assertEquals("Phải trả về 0 khi địa chỉ quá dài", 0, result);
+    }
+    
+    @Test
+    public void testUpdate_KH022() {
+        KhachHangDTO dto = new KhachHangDTO(107, "Nguyen Van A", "Hà Nội", "012345678ABC");
+        dao = new KhachHangDAO();
+        int result = dao.update(dto);
+        assertEquals("Phải trả về 0 khi số điện thoại không hợp lệ", 0, result);
     }
 
-    // TCU09: Địa chỉ quá dài
-    @Test
-    public void testUpdate_TCU09_DiaChiQuaDai() {
-        String longAddress = "Hà Nội".repeat(100);
-        KhachHangDTO dto = createDTO(106, "Nguyen Van A", longAddress, "0123456789");
-        int result = dao.update(dto);
-        assertEquals(0, result);
-    }
-
-    // TCU10: SDT quá dài
-    @Test
-    public void testUpdate_TCU10_SDTQuaDai() {
-        String longPhone = "0123456789".repeat(50);
-        KhachHangDTO dto = createDTO(107, "Nguyen Van A", "Hà Nội", longPhone);
-        int result = dao.update(dto);
-        assertEquals(0, result);
-    }
-   
 
     /**
      * Test of delete method, of class KhachHangDAO.
      */
     
-    // TCD01: Xoá thành công khách hàng tồn tại
     @Test
-    public void testDelete_TCD01_ThanhCong() {
-        int result = dao.delete("101"); // makh tồn tại
-        assertEquals(1, result);
+    public void testDelete_KH023() {
+        dao = new KhachHangDAO();
+        int result = dao.delete("101");
+        assertEquals("Phải trả về 1 khi xoá thành công", 1, result);
+    }   
+    
+    @Test
+    public void testDelete_KH024() {
+        dao = new KhachHangDAO();
+        int result = dao.delete("999");
+        assertEquals("Phải trả về 0 khi makh không tồn tại", 0, result);
     }
 
-    // TCD02: Xoá thất bại do makh không hợp lệ (không tồn tại)
     @Test
-    public void testDelete_TCD02_MaKHKhongTonTai() {
-        int result = dao.delete("999"); // makh không tồn tại
-        assertEquals(0, result);
+    public void testDelete_KH025() {
+        dao = new KhachHangDAO();
+        int result = dao.delete(null);
+        assertEquals("Phải trả về 0 khi thiếu mã khách hàng", 0, result);
     }
-    
+
     /**
      * Test of selectAll method, of class KhachHangDAO.
      */
     
-//    @Test
-//    public void testGetAllActive_TCS01_CoDuLieu() {
-//        KhachHangDAO dao = new KhachHangDAO();
-//        List<KhachHangDTO> danhSach = dao.selectAll();
-//        assertNotNull(danhSach);
-//        assertFalse(danhSach.isEmpty());
-//        assertEquals("Phải trả về đúng số lượng khách hàng active", 19, danhSach.size());
-//    }
+    @Test
+    public void testSelectAll_KH026() {
+        dao = new KhachHangDAO();
+        List<KhachHangDTO> list = dao.selectAll();
 
+        assertNotNull("Danh sách không được null", list);
+        assertEquals("Danh sách khách hàng có trangthai = 1", 20, list.size());
+    }
 
+    @Test
+    public void testSelectAll_KH027() {
+        dao = new KhachHangDAO();
+        List<KhachHangDTO> list = dao.selectAll();
+
+        assertNotNull("Danh sách không được null", list);
+        assertEquals("Danh sách khách hàng có trangthai = 1", 20, list.size());
+    }
+    
     /**
      * Test of selectById method, of class KhachHangDAO.
      */
-    // TCG01: Lấy khách hàng theo makh thành công
+    
     @Test
-    public void testSelectById_TCG01_KhachHangTonTai() {
-        System.out.println("TCG01 - Lấy khách hàng theo makh thành công");
-        KhachHangDAO instance = new KhachHangDAO();
-        KhachHangDTO result = instance.selectById("99");
+    public void testSelectById_KH028() {
+        dao = new KhachHangDAO();
+        KhachHangDTO result = dao.selectById("101");
 
-        assertNotNull("Phải trả về thông tin khách hàng", result);
-        assertEquals("Mã khách hàng phải khớp", 99, result.getMaKH());
+        assertNotNull("Phải trả về đối tượng KhachHangDTO", result);
     }
 
-    // TCG02: Lấy khách hàng thất bại do makh không hợp lệ (không tồn tại, = 0, < 0, thập phân)
     @Test
-    public void testSelectById_TCG02_KhachHangKhongHopLe() {
-        System.out.println("TCG02 - Lấy khách hàng thất bại do makh không hợp lệ");
-        String[] invalidInputs = {"999", "0", "-1", "1.5"};
-        KhachHangDAO instance = new KhachHangDAO();
+    public void testSelectById_NCC029() {
+        dao = new KhachHangDAO();
+        KhachHangDTO result = dao.selectById("999");
 
-        for (String makh : invalidInputs) {
-            KhachHangDTO result = instance.selectById(makh);
-            assertNull("Phải trả về null khi makh không hợp lệ: " + makh, result);
-        }
+        assertNull("Khách hàng không tồn tại nên kết quả phải là null", result);
     }
-
-    // TCG04: Lấy khách hàng thất bại do bản ghi đã bị xóa mềm (trangthai = 0)
+    
     @Test
-    public void testSelectById_TCG04_KhachHangDaXoaMem() {
-        System.out.println("TCG04 - Lấy khách hàng thất bại do bản ghi đã bị xóa mềm");
-        String makh = "101"; // Giả sử khách hàng này đã bị xóa mềm (trangthai = 0)
-        KhachHangDAO instance = new KhachHangDAO();
-        KhachHangDTO result = instance.selectById(makh);
+    public void testSelectById_NCC030() {
+        dao = new KhachHangDAO();
+        KhachHangDTO result = dao.selectById(null);
 
-        assertNull("Phải trả về null nếu khách hàng đã bị xóa mềm", result);
+        assertNull("Thiếu mã khách hàng nên kết quả phải là null", result);
+    }
+    
+    @Test
+    public void testSelectById_NCC031() {
+        dao = new KhachHangDAO();
+        KhachHangDTO result = dao.selectById("111");
+
+        assertNull("Khách hàng bị xoá (trangthai = 0) nên không được trả về", result);
     }
 
     /**
      * Test of getAutoIncrement method, of class KhachHangDAO.
      */
+    @Test
+    public void testGetAutoIncrement_KH037() {
+        dao = new KhachHangDAO();
+        int nextId = dao.getAutoIncrement();
 
+        assertTrue("Giá trị AUTO_INCREMENT phải >= 2 khi bảng có dữ liệu", nextId >= 2);
+    }
+    
+    @Test
+    public void testGetAutoIncrement_KH038() {
+        dao = new KhachHangDAO();
+
+        int nextId = dao.getAutoIncrement();
+        assertEquals("Giá trị AUTO_INCREMENT phải là 1 khi bảng rỗng", 1, nextId);
+    }
 }

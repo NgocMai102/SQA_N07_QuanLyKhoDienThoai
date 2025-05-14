@@ -10,6 +10,79 @@
 <project name="QuanLyKhoHang" default="default" basedir=".">
     <description>Builds, tests, and runs the project QuanLyKhoHang.</description>
     <import file="nbproject/build-impl.xml"/>
+
+    <taskdef uri="antlib:org.jacoco.ant" resource="org/jacoco/ant/antlib.xml">
+        <classpath>
+            <pathelement path="E:\Environment\Java\jacoco-lib\org.jacoco.ant-0.8.13.jar"/>
+            <pathelement path="E:\Environment\Java\jacoco-lib\org.jacoco.core-0.8.13.jar"/>
+            <pathelement path="E:\Environment\Java\jacoco-lib\org.jacoco.report-0.8.13.jar"/>
+        </classpath>
+    </taskdef>
+
+
+    <!-- Khai báo thư mục build -->
+    <property name="build.dir" value="build"/>
+    <property name="classes.dir" value="${build.dir}/classes"/>
+    <property name="src.dir" value="src"/>
+    <property name="test.dir" value="test"/>
+    <property name="report.dir" value="coverage-report"/>
+
+    <!-- Compile -->
+    <target name="compile">
+        <mkdir dir="${classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${classes.dir}" includeantruntime="false"/>
+    </target>
+
+    <!-- Coverage + Test -->
+    <target name="coverage" depends="compile"
+            xmlns:jacoco="antlib:org.jacoco.ant">
+
+        <!-- Start coverage agent -->
+        <jacoco:coverage destfile="${build.dir}/jacoco.exec">
+
+            <!-- Run JUnit test -->
+            <junit printsummary="true" fork="true">
+                <classpath>
+                    <pathelement path="${classes.dir}"/>
+                    <fileset dir="lib"> <!-- lib chứa junit và các jar cần thiết -->
+                        <include name="**/*.jar"/>
+                    </fileset>
+                </classpath>
+                <batchtest>
+                    <fileset dir="${test.dir}">
+                        <include name="**/*Test.java"/>
+                    </fileset>
+                </batchtest>
+                <formatter type="plain"/>
+            </junit>
+
+        </jacoco:coverage>
+    </target>
+
+    <target name="report" depends="coverage"
+            xmlns:jacoco="antlib:org.jacoco.ant">
+
+        <mkdir dir="${report.dir}"/>
+
+        <jacoco:report>
+            <executiondata>
+                <file file="${build.dir}/jacoco.exec"/>
+            </executiondata>
+
+            <structure name="MyProject">
+                <classfiles>
+                    <fileset dir="${classes.dir}"/>
+                </classfiles>
+                <sourcefiles>
+                    <fileset dir="${src.dir}"/>
+                </sourcefiles>
+            </structure>
+
+            <html destdir="${report.dir}/html"/>
+            <xml  destfile="${report.dir}/coverage.xml"/>
+            <csv  destfile="${report.dir}/coverage.csv"/>
+        </jacoco:report>
+    </target>
     <!--
 
     There exist several targets which are by default empty and which can be 

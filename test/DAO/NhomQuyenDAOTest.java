@@ -5,6 +5,7 @@
 package DAO;
 
 import DTO.NhomQuyenDTO;
+import config.JDBCUtil;
 import java.util.ArrayList;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -27,15 +28,19 @@ public class NhomQuyenDAOTest {
     @BeforeClass
     public static void setUpClass() throws SQLException {
         dao = new NhomQuyenDAO();
-        connection = getConnection();
+        connection = DriverManager.getConnection(
+            "jdbc:mysql://localhost:3308/quanlikhohang", "root", "0915166497Bc#"
+        );
         connection.setAutoCommit(false);
+        JDBCUtil.setTestConnection(connection);
         
     }
     
     @AfterClass
     public static void tearDownClass() throws SQLException {
-        connection.rollback(); // Roll back all changes made during tests
+        connection.rollback(); // undo all changes
         connection.setAutoCommit(true);
+        JDBCUtil.clearTestConnection(); // stop using test connection
         connection.close();
     }
 
@@ -43,36 +48,36 @@ public class NhomQuyenDAOTest {
      * Test of getInstance method, of class NhomQuyenDAO.
      */
     @Test
-    public void testInsert_NhomQuyenChuaTonTai() {
-        NhomQuyenDTO dto = new NhomQuyenDTO(11, "Qu·∫£n l√Ω TEST");
-        int result = dao.insert(dto);
+    public void testInsert_NhomQuyenChuaTonTai() throws SQLException {
+        NhomQuyenDTO dto = new NhomQuyenDTO(11, "Qu?n l˝ TEST");
+        int result = dao.insert(dto); // Pass test connection
         assertEquals(1, result);
     }
 
     @Test
     public void testInsert_NhomQuyenDaTonTai() {
-        NhomQuyenDTO dto = new NhomQuyenDTO(1, "abc");
+        NhomQuyenDTO dto = new NhomQuyenDTO(1, "Qu?n l˝ kho");
         int result = dao.insert(dto);
         assertEquals(0, result); 
     }
 
     @Test
     public void testUpdate_NhomQuyenTonTai() {
-        NhomQuyenDTO dto = new NhomQuyenDTO(10, "ƒê√£ c·∫≠p nh·∫≠t TEST");
+        NhomQuyenDTO dto = new NhomQuyenDTO(6, "?„ c?p nh?t TEST");
         int result = dao.update(dto);
         assertEquals(1, result);
     }
 
     @Test
     public void testUpdate_NhomQuyenKhongTonTai() {
-        NhomQuyenDTO dto = new NhomQuyenDTO(100, "Kh√¥ng t·ªìn t·∫°i");
+        NhomQuyenDTO dto = new NhomQuyenDTO(100, "KhÙng t?n t?i");
         int result = dao.update(dto);
         assertEquals(0, result);
     }
 
     @Test
     public void testDelete_NhomQuyenTonTai() {
-        int result = dao.delete("10");
+        int result = dao.delete("6");
         assertEquals(1, result);
     }
 
@@ -86,7 +91,7 @@ public class NhomQuyenDAOTest {
     public void testSelectAll_CoDuLieu() {
         ArrayList<NhomQuyenDTO> list = dao.selectAll();
         assertNotNull(list);
-        assertTrue(list.size() > 0);
+        assertTrue(list.size() == 5);
     }
 
     @Test
@@ -94,6 +99,7 @@ public class NhomQuyenDAOTest {
         NhomQuyenDTO found = dao.selectById("1");
         assertNotNull(found);
         assertEquals(1, found.getManhomquyen());
+        assertEquals(new NhomQuyenDTO(1, "Qu?n l˝ kho"), found) ;
     }
 
     @Test
@@ -102,5 +108,22 @@ public class NhomQuyenDAOTest {
         assertNull(found);
     }
 
-    
+    @Test
+    public void testGetAutoIncrement() throws SQLException {
+        int nextIdBefore = dao.getAutoIncrement();
+        ArrayList<NhomQuyenDTO> list = dao.selectAll();
+
+        // Insert a new record
+        String insertSql = "INSERT INTO nhomquyen (tennhomquyen, trangthai) VALUES (?, ?)";
+        PreparedStatement pst = connection.prepareStatement(insertSql);
+        pst.setString(1, "AutoIncTest");
+        pst.setInt(2, 1);
+        pst.executeUpdate();
+
+        int nextIdAfter = dao.getAutoIncrement();
+
+        // The auto-increment should increase by 1
+        assertEquals(nextIdBefore + 1, nextIdAfter);
+        
+    }
 }
