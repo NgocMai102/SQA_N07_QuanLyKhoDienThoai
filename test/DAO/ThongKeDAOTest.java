@@ -33,7 +33,6 @@ public class ThongKeDAOTest {
     private Connection conn;
     SimpleDateFormat sdf;
     
-    
     @Before
     public void setUp() throws SQLException {
         conn = getConnection();
@@ -546,9 +545,81 @@ public class ThongKeDAOTest {
     /**
      * Test of getThongKe7NgayGanNhat method, of class ThongKeDAO.
      */
-    
+    // TK_021: Cơ sở dữ liệu đủ 7 ngày → Trả về danh sách 7 ngày gần nhất
+    @Test
+    public void TK_021_getThongKe7NgayGanNhat_Du7Ngay() {
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKe7NgayGanNhat();
+        assertNotNull(result);
+        assertEquals(8, result.size());
+    }
 
-    /**
-     * Test of getThongKeTuNgayDenNgay method, of class ThongKeDAO.
-     */
+    // TK_022: Cơ sở dữ liệu trống → Trả về danh sách rỗng
+    @Test
+    public void TK_022_getThongKe7NgayGanNhat_CSDLTrong() {
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKe7NgayGanNhat();
+        assertNotNull(result);
+        assertEquals(7, result.size());
+    }
+
+    // TK_023: Thống kê từ ngày đến ngày hợp lệ → Trả về danh sách thống kê đúng
+    @Test
+    public void TK_023_getThongKeTuNgayDenNgay_HopLe()  {
+        String start = "04/04/2023";
+        String end = "10/05/2023";
+
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKeTuNgayDenNgay(start, end);
+        assertNotNull(result);
+        assertFalse(result.isEmpty());
+    }
+
+    // TK_024: Ngày bắt đầu không hợp lệ → Ném Exception
+    @Test(expected = Exception.class)
+    public void TK_024_getThongKeTuNgayDenNgay_StartKhongHopLe_ThrowException() throws Exception {
+        String start = "30/02/2024"; // ngày không tồn tại
+        String end = "01/04/2024";
+
+        dao.getThongKeTuNgayDenNgay(start, end);
+    }
+
+    // TK_025: Ngày kết thúc không hợp lệ → Ném Exception
+    @Test(expected = Exception.class)
+    public void TK_025_getThongKeTuNgayDenNgay_EndKhongHopLe_ThrowException() throws Exception {
+        String start = "01/01/2024";
+        String end = "30/02/2024"; // ngày không tồn tại
+
+        dao.getThongKeTuNgayDenNgay(start, end);
+    }
+
+    // TK_026: end < start → Ném Exception
+    @Test(expected = Exception.class)
+    public void TK_026_getThongKeTuNgayDenNgay_EndNhoHonStart_ThrowException() throws Exception {
+        String start = "01/04/2024";
+        String end = "01/01/2024";
+
+        dao.getThongKeTuNgayDenNgay(start, end);
+    }
+
+    // TK_027: Thiếu ngày kết thúc → Trả về danh sách rỗng
+    @Test
+    public void TK_027_getThongKeTuNgayDenNgay_EndThieu() throws Exception {
+        String start = "01/01/2024";
+        String end = null;
+
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKeTuNgayDenNgay(start, end);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+
+    // TK_028: Thiếu ngày bắt đầu → Trả về danh sách rỗng
+    @Test
+    public void TK_028_getThongKeTuNgayDenNgay_StartThieu() throws Exception {
+        String start = null;
+        String end = "01/04/2024";
+
+        ArrayList<ThongKeTungNgayTrongThangDTO> result = dao.getThongKeTuNgayDenNgay(start, end);
+        assertNotNull(result);
+        assertTrue(result.isEmpty());
+    }
+    
+    
 }
