@@ -57,6 +57,19 @@ public class KhachHangDialogTest extends AssertJSwingJUnitTestCase {
         dialog.textBox("txtForm_Địa chỉ").setText("123 Đường ABC");
 
         dialog.button(JButtonMatcher.withText("Thêm khách hàng")).click();
+        
+        try {
+            JOptionPaneFixture optionPane = findOptionPane()
+                    .withTimeout(5000)
+                    .using(robot());
+
+            optionPane.requireVisible();
+            optionPane.requireMessage("Thêm khách hàng thành công");
+            optionPane.okButton().click();
+
+        } catch (org.assertj.swing.exception.WaitTimedOutError e) {
+            fail("Không hiển thị thông báo 'Thêm khách hàng thành công' sau khi thêm khách hàng thành công.");
+        }
     }
 
     @org.junit.Test

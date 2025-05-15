@@ -167,6 +167,14 @@ public class NhaCungCapDAOTest {
         int result = dao.insert(dto);
         assertEquals("Phải trả về 0 khi sdt sai định dạng", 0, result);
     }
+    
+    @Test
+    public void testInsert_NCC045() {
+        NhaCungCapDTO dto = new NhaCungCapDTO(111, "Công ty A", "Hà Nội", "a@gmail.com", "0123456789");
+        NhaCungCapDAO dao = new NhaCungCapDAO();
+        int result = dao.insert(dto);
+        assertEquals("Phải trả về 0 khi thêm thất bại", 0, result);
+    }
 
     /**
      * Test of update method, of class NhaCungCapDAO.
@@ -231,7 +239,7 @@ public class NhaCungCapDAOTest {
     @Test
     public void testUpdate_NCC024() {
         String longName = "Công ty " + "h".repeat(490);
-        NhaCungCapDTO dto = new NhaCungCapDTO(106, longName, "Hà Nội", "h@gmail.com", "097198333");
+        NhaCungCapDTO dto = new NhaCungCapDTO(101, longName, "Hà Nội", "h@gmail.com", "097198333");
         dao = new NhaCungCapDAO();
         int result = dao.update(dto);
         assertEquals("Dữ liệu không cập nhật do tên quá dài", 0, result);
@@ -240,7 +248,7 @@ public class NhaCungCapDAOTest {
     @Test
     public void testUpdate_NCC025() {
         String longAddress = "Hà Nội " + "a".repeat(490);
-        NhaCungCapDTO dto = new NhaCungCapDTO(107, "Công ty H", longAddress, "h@gmail.com", "097198333");
+        NhaCungCapDTO dto = new NhaCungCapDTO(101, "Công ty H", longAddress, "h@gmail.com", "097198333");
         dao = new NhaCungCapDAO();
         int result = dao.update(dto);
         assertEquals("Dữ liệu không cập nhật do địa chỉ quá dài", 0, result);
@@ -249,7 +257,7 @@ public class NhaCungCapDAOTest {
     @Test
     public void testUpdate_NCC026() {
         String longEmail = "h" + "a".repeat(490) + "@gmail.com";
-        NhaCungCapDTO dto = new NhaCungCapDTO(107, "Công ty H", "Hà Nội", longEmail, "097198333");
+        NhaCungCapDTO dto = new NhaCungCapDTO(101, "Công ty H", "Hà Nội", longEmail, "097198333");
         dao = new NhaCungCapDAO();
         int result = dao.update(dto);
         assertEquals("Dữ liệu không cập nhật do email quá dài", 0, result);
@@ -257,7 +265,7 @@ public class NhaCungCapDAOTest {
     
     @Test
     public void testUpdate_NCC027() {
-        NhaCungCapDTO dto = new NhaCungCapDTO(107, "Công ty H", "Hà Nội", "hgmail.com", "097198333");
+        NhaCungCapDTO dto = new NhaCungCapDTO(101, "Công ty H", "Hà Nội", "hgmail.com", "097198333");
         dao = new NhaCungCapDAO();
         int result = dao.update(dto);
         assertEquals("Dữ liệu không cập nhật do định dạng email sai", 0, result);
@@ -265,10 +273,18 @@ public class NhaCungCapDAOTest {
     
     @Test
     public void testUpdate_NCC028() {
-        NhaCungCapDTO dto = new NhaCungCapDTO(107, "Công ty H", "Hà Nội", "h@gmail.com", "av097198333");
+        NhaCungCapDTO dto = new NhaCungCapDTO(110, "Công ty H", "Hà Nội", "h@gmail.com", "av097198333");
         dao = new NhaCungCapDAO();
         int result = dao.update(dto);
         assertEquals("Dữ liệu không cập nhật do số điện thoại sai định dạng", 0, result);
+    }
+    
+    @Test
+    public void testUpdate_NCC046() {
+        NhaCungCapDTO dto = new NhaCungCapDTO(111, "Cty ABC", "Hà Nội", "abc@gmail.com", "0911111111");
+        dao = new NhaCungCapDAO();
+        int result = dao.update(dto);
+        assertEquals("Dữ liệu cập nhật thất bại", 0, result);
     }
 
     /**

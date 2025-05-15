@@ -142,6 +142,14 @@ public class KhachHangDAOTest {
         int result = dao.insert(dto);
         assertEquals("Phải trả về 0 khi số điện thoại sai định dạng", 0, result);
     }
+    
+    @Test
+    public void testInsert_KH039() {
+        KhachHangDTO dto = new KhachHangDTO(110, "Nguyen Van A", "Hà Nội", "0123456789");
+        dao = new KhachHangDAO();
+        int result = dao.insert(dto);
+        assertEquals("Phải trả về 0 khi thêm thất bại", 0, result);
+    }
 
     /**
      * Test of update method, of class KhachHangDAO.
@@ -220,7 +228,15 @@ public class KhachHangDAOTest {
         int result = dao.update(dto);
         assertEquals("Phải trả về 0 khi số điện thoại không hợp lệ", 0, result);
     }
-
+    
+    @Test
+    public void testUpdate_KH040() {
+        KhachHangDTO dto = new KhachHangDTO(101, "Nguyen A", "Hà Nội", "0123456789");
+        dao = new KhachHangDAO();
+        int result = dao.update(dto);
+        assertEquals("Phải trả về 0 khi cập nhật không thành công", 0, result);
+    }
+ 
 
     /**
      * Test of delete method, of class KhachHangDAO.

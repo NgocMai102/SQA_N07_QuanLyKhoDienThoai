@@ -129,6 +129,14 @@ public class KhuVucKhoDAOTest {
         int result = dao.insert(dto);
         assertEquals("Ghi chú quá dài, thêm mới phải thất bại", 0, result);
     }
+    
+    @Test
+    public void testInsert_KVK031() {
+        KhuVucKhoDTO dto = new KhuVucKhoDTO(106, "Khu A", "Tầng trệt");
+        dao = new KhuVucKhoDAO();
+        int result = dao.insert(dto);
+        assertEquals("Thêm mới khu vực hợp lệ phải thất bại", 0, result);
+    }
 
     /**
      * Test of update method, of class KhuVucKhoDAO.
@@ -191,6 +199,14 @@ public class KhuVucKhoDAOTest {
         int result = dao.update(dto);
         assertEquals("Cập nhật thất bại do ghi chú quá dài", 0, result);
     }
+    
+        @Test
+        public void testUpdate_KVK032() {
+            KhuVucKhoDTO dto = new KhuVucKhoDTO(101, "Khu A", "Đã cập nhật");
+            dao = new KhuVucKhoDAO();
+            int result = dao.update(dto);
+            assertEquals("Cập nhật thất bại do trùng thông tin", 0, result);
+        }
     
     /**
      * Test of delete method, of class KhuVucKhoDAO.
