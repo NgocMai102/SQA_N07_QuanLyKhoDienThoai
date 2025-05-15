@@ -38,6 +38,10 @@ import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 public class KhachHang extends JPanel implements ActionListener, ItemListener {
+    
+    public KhachHang() {
+        // Gọi constructor đầy đủ nếu cần
+    }
 
     PanelBorderRadius main, functionBar;
     JPanel pnlBorder1, pnlBorder2, pnlBorder3, pnlBorder4, contentCenter;
