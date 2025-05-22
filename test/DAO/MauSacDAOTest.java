@@ -4,7 +4,9 @@
  */
 package DAO;
 
+import static DAO.KhuVucKhoDAOTest.connection;
 import DTO.ThuocTinhSanPham.MauSacDTO;
+import config.JDBCUtil;
 import static config.JDBCUtil.getConnection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -14,13 +16,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import org.junit.Before;
 import java.sql.Connection;
+import java.sql.DriverManager;
 
 /**
  *
  * @author Maii
  */
 public class MauSacDAOTest {
-    private Connection conn;
+    static Connection connection;
     MauSacDAO dao;
     
     public MauSacDAOTest() {
@@ -28,21 +31,23 @@ public class MauSacDAOTest {
     
     @Before
     public void setUp() throws SQLException {
-        conn = getConnection();
-        conn.setAutoCommit(false);
+        connection = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3308/quanlikhohang", "root", "0915166497Bc#");
+        connection.setAutoCommit(false);
+        JDBCUtil.setTestConnection(connection);
         dao = new MauSacDAO();
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        connection.rollback(); // undo all changes
+        connection.setAutoCommit(true);
+        JDBCUtil.clearTestConnection(); // stop using test connection
+        connection.close();
     }
     
     @After
     public void tearDown() throws Exception {
-        if (conn != null) {
-            conn.rollback(); // rollback các thay đổi
-            conn.close();
-        }
     }
 
 

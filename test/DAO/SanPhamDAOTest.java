@@ -4,9 +4,12 @@
  */
 package DAO;
 
+import static DAO.PhieuXuatDAOTest.connection;
 import DTO.SanPhamDTO;
+import config.JDBCUtil;
 import static config.JDBCUtil.getConnection;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -28,29 +31,31 @@ import static org.junit.Assert.*;
 public class SanPhamDAOTest {
     
     private SanPhamDAO dao;
-    private Connection conn;
+    static Connection connection;
     
     public SanPhamDAOTest() {
     }
     
     @Before
     public void setUp() throws SQLException {
-        conn = getConnection();
-        conn.setAutoCommit(false);
+        connection = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3308/quanlikhohang", "root", "0915166497Bc#");
+        connection.setAutoCommit(false);
+        JDBCUtil.setTestConnection(connection);
         dao = new SanPhamDAO();
     }
     
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        connection.rollback(); // undo all changes
+        connection.setAutoCommit(true);
+        JDBCUtil.clearTestConnection(); // stop using test connection
+        connection.close();
     }
     
     @After
     public void tearDown() throws Exception {
-        if (conn != null) {
-            conn.rollback(); // rollback các thay đổi
-            conn.close();
-        }
     }
     /**
      * Test of insert method, of class SanPhamDAO.

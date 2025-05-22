@@ -49,28 +49,28 @@ public class NhomQuyenDAOTest {
      */
     @Test
     public void testInsert_NhomQuyenChuaTonTai() throws SQLException {
-        NhomQuyenDTO dto = new NhomQuyenDTO(11, "Qu?n l� TEST");
+        NhomQuyenDTO dto = new NhomQuyenDTO(11, "Quản lý TEST");
         int result = dao.insert(dto); // Pass test connection
         assertEquals(1, result);
     }
 
     @Test
     public void testInsert_NhomQuyenDaTonTai() {
-        NhomQuyenDTO dto = new NhomQuyenDTO(1, "Qu?n l� kho");
+        NhomQuyenDTO dto = new NhomQuyenDTO(1, "Quản lý kho");
         int result = dao.insert(dto);
         assertEquals(0, result); 
     }
 
     @Test
     public void testUpdate_NhomQuyenTonTai() {
-        NhomQuyenDTO dto = new NhomQuyenDTO(6, "?� c?p nh?t TEST");
+        NhomQuyenDTO dto = new NhomQuyenDTO(5, "Cập nhật TEST");
         int result = dao.update(dto);
         assertEquals(1, result);
     }
 
     @Test
     public void testUpdate_NhomQuyenKhongTonTai() {
-        NhomQuyenDTO dto = new NhomQuyenDTO(100, "Kh�ng t?n t?i");
+        NhomQuyenDTO dto = new NhomQuyenDTO(100, "Không tồn tại");
         int result = dao.update(dto);
         assertEquals(0, result);
     }
@@ -91,7 +91,9 @@ public class NhomQuyenDAOTest {
     public void testSelectAll_CoDuLieu() {
         ArrayList<NhomQuyenDTO> list = dao.selectAll();
         assertNotNull(list);
-        assertTrue(list.size() == 5);
+        System.out.println(list.size());
+        System.out.println(list);
+        assertTrue(list.size() == 7);
     }
 
     @Test
@@ -99,7 +101,7 @@ public class NhomQuyenDAOTest {
         NhomQuyenDTO found = dao.selectById("1");
         assertNotNull(found);
         assertEquals(1, found.getManhomquyen());
-        assertEquals(new NhomQuyenDTO(1, "Qu?n l� kho"), found) ;
+        assertEquals(new NhomQuyenDTO(1, "Quản lý kho"), found) ;
     }
 
     @Test

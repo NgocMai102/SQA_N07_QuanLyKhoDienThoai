@@ -3,9 +3,10 @@ package DAO;
 
 import DTO.PhieuNhapDTO;
 import com.mysql.cj.jdbc.PreparedStatementWrapper;
-import com.sun.jdi.connect.spi.Connection;
 import config.JDBCUtil;
 import static config.JDBCUtil.getConnection;
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -19,18 +20,25 @@ public class PhieuNhapDAOTest {
     
     public PhieuNhapDAOTest() {
     }
-     private java.sql.Connection con;
+    static Connection connection;
     private PhieuNhapDAO instance;
     
     
      @Before
     public void setUp() throws SQLException {
-        con = getConnection();
-        con.setAutoCommit(false);
-        instance = new  PhieuNhapDAO();
+        connection = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3308/quanlikhohang", "root", "0915166497Bc#");
+        connection.setAutoCommit(false);
+        JDBCUtil.setTestConnection(connection);
+        instance = new PhieuNhapDAO();
     }
+    
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        connection.rollback(); // undo all changes
+        connection.setAutoCommit(true);
+        JDBCUtil.clearTestConnection(); // stop using test connection
+        connection.close();
     }
 
     

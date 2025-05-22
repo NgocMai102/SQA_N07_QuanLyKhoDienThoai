@@ -1,5 +1,6 @@
 package DAO;
 
+import static DAO.PhieuNhapDAOTest.connection;
 import DTO.PhieuXuatDTO;
 import config.JDBCUtil;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ import static config.JDBCUtil.getConnection;
 
 public class PhieuXuatDAOTest {
 
-    private Connection con;
+    static Connection connection;
     private  PhieuXuatDAO dao;
     
     public PhieuXuatDAOTest() {
@@ -21,13 +22,19 @@ public class PhieuXuatDAOTest {
     
     @Before
     public void setUp() throws SQLException {
-        con = getConnection();
-        con.setAutoCommit(false);
+        connection = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3308/quanlikhohang", "root", "0915166497Bc#");
+        connection.setAutoCommit(false);
+        JDBCUtil.setTestConnection(connection);
         dao = new  PhieuXuatDAO();
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        connection.rollback(); // undo all changes
+        connection.setAutoCommit(true);
+        JDBCUtil.clearTestConnection(); // stop using test connection
+        connection.close();
     }
     
     @Test
@@ -224,15 +231,13 @@ public void testSelectAll_HasData_XH19() throws Exception {
 public void testSelectAll_Empty_XH20() throws Exception {
     System.out.println("XH20 - Không có dữ liệu trong bảng phiếu xuất");
 
-    Statement stmt = con.createStatement();
+    Statement stmt = connection.createStatement();
     stmt.executeUpdate("DELETE FROM phieuxuat");
     ArrayList<PhieuXuatDTO> list = dao.selectAll();
 
     assertNotNull(list);
     assertEquals(0, list.size());
 
-    con.rollback(); // Khôi phục lại dữ liệu
-    JDBCUtil.closeConnection(con);
 }
 
 //Phương thức SelectById()
@@ -257,9 +262,6 @@ public void testSelectById_NullId_XH23() throws Exception {
 
     PhieuXuatDTO phieu = dao.selectById(null);
     assertNull(phieu);
-
-    con.rollback();
-    JDBCUtil.closeConnection(con);
 }
 
 

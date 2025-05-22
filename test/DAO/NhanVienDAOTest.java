@@ -1,10 +1,12 @@
 
 package DAO;
 
+import static DAO.NhaCungCapDAOTest.connection;
 import DTO.NhanVienDTO;
 import config.JDBCUtil;
 import static config.JDBCUtil.getConnection;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -17,19 +19,26 @@ import org.junit.Before;
 
 public class NhanVienDAOTest {
 
-    private Connection con;
+    static Connection connection;
     private NhanVienDAO dao;
     
     public NhanVienDAOTest() {
     }
      @Before
     public void setUp() throws SQLException {
-        con = getConnection();
-        con.setAutoCommit(false);
+        connection = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3308/quanlikhohang", "root", "0915166497Bc#");
+        connection.setAutoCommit(false);
+        JDBCUtil.setTestConnection(connection);
         dao = new  NhanVienDAO();
     }
+    
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        connection.rollback(); // undo all changes
+        connection.setAutoCommit(true);
+        JDBCUtil.clearTestConnection(); // stop using test connection
+        connection.close();
     }
 
 //    Phương thức insert()

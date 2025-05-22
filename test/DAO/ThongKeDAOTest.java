@@ -10,8 +10,10 @@ import DTO.ThongKe.ThongKeNhaCungCapDTO;
 import DTO.ThongKe.ThongKeTheoThangDTO;
 import DTO.ThongKe.ThongKeTonKhoDTO;
 import DTO.ThongKe.ThongKeTungNgayTrongThangDTO;
+import config.JDBCUtil;
 import static config.JDBCUtil.getConnection;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,22 +32,28 @@ import org.junit.Before;
 public class ThongKeDAOTest {
     
     private ThongKeDAO dao;
-    private Connection conn;
+    static Connection connection;
     SimpleDateFormat sdf;
     
     @Before
     public void setUp() throws SQLException {
-        conn = getConnection();
-        conn.setAutoCommit(false);
-        sdf = new SimpleDateFormat("dd/MM/yyyy");
+        connection = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3308/quanlikhohang", "root", "0915166497Bc#");
+        connection.setAutoCommit(false);
+        JDBCUtil.setTestConnection(connection);
         dao = new ThongKeDAO();
+        sdf = new SimpleDateFormat("dd/MM/yyyy");
     }
     
     public ThongKeDAOTest() {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        connection.rollback(); // undo all changes
+        connection.setAutoCommit(true);
+        JDBCUtil.clearTestConnection(); // stop using test connection
+        connection.close();
     }
 
     /**

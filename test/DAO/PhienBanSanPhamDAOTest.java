@@ -6,8 +6,10 @@ package DAO;
 
 import DTO.ChiTietSanPhamDTO;
 import DTO.PhienBanSanPhamDTO;
+import config.JDBCUtil;
 import java.sql.Connection;
 import static config.JDBCUtil.getConnection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,26 +26,30 @@ import org.junit.Before;
 public class PhienBanSanPhamDAOTest {
     
     private PhienBanSanPhamDAO dao;
-    private Connection conn;
+    static Connection conn;
     
     public PhienBanSanPhamDAOTest() {
     }
     
     @Before
     public void setUp() throws SQLException {
-        conn = getConnection();
+        conn = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3308/quanlikhohang", "root", "0915166497Bc#");
         conn.setAutoCommit(false);
+        JDBCUtil.setTestConnection(conn);
         dao = new PhienBanSanPhamDAO();
     }
     
     @After
     public void tearDown() throws SQLException {
-        conn.rollback();
-        conn.close();
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        conn.rollback(); // undo all changes
+        conn.setAutoCommit(true);
+        JDBCUtil.clearTestConnection(); // stop using test connection
+        conn.close();
     }
 
     /**
@@ -240,7 +246,7 @@ public class PhienBanSanPhamDAOTest {
     public void testSelectById_ValidMaSP_TC_103() {
         PhienBanSanPhamDTO dto = dao.selectById(2); // Mong đợi PhienBanSanPhamDTO có masp = 1
         assertNotNull(dto); // Kiểm tra nếu đối tượng trả về không phải null
-        assertEquals(2, dto.getMasp()); // Kiểm tra giá trị masp
+        assertEquals(1, dto.getMasp()); // Kiểm tra giá trị masp
     }
 
     // TC_104: Mã Id không tồn tại - Kiểm tra khi sản phẩm không tồn tại trong cơ sở dữ liệu

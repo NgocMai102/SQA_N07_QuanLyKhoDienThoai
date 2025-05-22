@@ -4,9 +4,12 @@
  */
 package DAO;
 
+import static DAO.TaiKhoanDAOTest.connection;
 import DTO.ThuocTinhSanPham.DungLuongRomDTO;
+import config.JDBCUtil;
 import static config.JDBCUtil.getConnection;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,13 +26,15 @@ import org.junit.Before;
 public class DungLuongRomDAOTest {
     
     private DungLuongRomDAO dao;
-    private Connection conn;
+    static Connection connection;
     
     
     @Before
     public void setUp() throws SQLException {
-        conn = getConnection();
-        conn.setAutoCommit(false);
+        connection = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3308/quanlikhohang", "root", "0915166497Bc#");
+        connection.setAutoCommit(false);
+        JDBCUtil.setTestConnection(connection);
         dao = new DungLuongRomDAO();
     }
     
@@ -38,15 +43,15 @@ public class DungLuongRomDAOTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        connection.rollback(); // undo all changes
+        connection.setAutoCommit(true);
+        JDBCUtil.clearTestConnection(); // stop using test connection
+        connection.close();
     }
 
     @After
     public void tearDown() throws Exception {
-        if (conn != null) {
-            conn.rollback(); // rollback các thay đổi
-            conn.close();
-        }
     }
     
     /**

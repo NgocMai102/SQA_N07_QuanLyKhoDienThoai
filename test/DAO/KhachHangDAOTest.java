@@ -4,9 +4,12 @@
  */
 package DAO;
 
+import static DAO.TaiKhoanDAOTest.connection;
 import DTO.KhachHangDTO;
+import config.JDBCUtil;
 import static config.JDBCUtil.getConnection;
 import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.List;
 import org.junit.AfterClass;
@@ -21,13 +24,15 @@ import org.junit.Before;
 public class KhachHangDAOTest {
     
     private KhachHangDAO dao;
-    private Connection conn;
+    static Connection connection;
     
     
     @Before
     public void setUp() throws SQLException {
-        conn = getConnection();
-        conn.setAutoCommit(false);
+        connection = DriverManager.getConnection(
+                "jdbc:mysql://localhost:3308/quanlikhohang", "root", "0915166497Bc#");
+        connection.setAutoCommit(false);
+        JDBCUtil.setTestConnection(connection);
         dao = new KhachHangDAO();
     }
     
@@ -35,7 +40,11 @@ public class KhachHangDAOTest {
     }
     
     @AfterClass
-    public static void tearDownClass() {
+    public static void tearDownClass() throws SQLException {
+        connection.rollback(); // undo all changes
+        connection.setAutoCommit(true);
+        JDBCUtil.clearTestConnection(); // stop using test connection
+        connection.close();
     }
 
     /**
