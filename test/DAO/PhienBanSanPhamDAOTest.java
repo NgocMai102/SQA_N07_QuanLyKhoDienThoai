@@ -123,7 +123,7 @@ public class PhienBanSanPhamDAOTest {
 //    @Test(expected = Exception.class)
 //    public void testInsert_AbnormallyLargeValue_TC_088() throws SQLException {
 //        ArrayList<PhienBanSanPhamDTO> list = new ArrayList<>();
-//        list.add(new PhienBanSanPhamDTO(999999999999, 1, 128, 6, 2, 4000, 7000, 11)); // quá giới hạn int
+//        list.add(new PhienBanSanPhamDTO(99999999999, 1, 128, 6, 2, 4000, 7000, 11)); // quá giới hạn int
 //        list.add(new PhienBanSanPhamDTO(2, 2, 128, 6, 2, 5000, 8000, 12));
 //        list.add(new PhienBanSanPhamDTO(3, 3, 128, 6, 2, 6000, 8000, 13));
 //
@@ -228,18 +228,18 @@ public class PhienBanSanPhamDAOTest {
     }
 
 //    // TC_101: Cơ sở dữ liệu trống - Kiểm tra trả về danh sách đầy đủ và đúng dữ liệu
-//    @Test
-//    public void testSelectAll_EmptyDatabase_TC_101() {
-//        List<PhienBanSanPhamDTO> list = dao.selectAll(); // Mong đợi danh sách trả về có size > 0, dữ liệu khớp với trong DB
-//        assertTrue(list.size() > 0); // Kiểm tra danh sách không trống
-//    }
+    @Test
+    public void testSelectAll_EmptyDatabase_TC_101() {
+        ArrayList<PhienBanSanPhamDTO> list = dao.selectAll("1"); // Mong đợi danh sách trả về có size > 0, dữ liệu khớp với trong DB
+        assertTrue(list.size() > 0); // Kiểm tra danh sách không trống
+    }
 //
 //    // TC_102: Cơ sở dữ liệu không trống - Kiểm tra trả về danh sách rỗng nếu không có bản ghi hợp lệ
-//    @Test
-//    public void testSelectAll_NonEmptyDatabase_TC_102() {
-//        List<PhienBanSanPhamDTO> list = dao.selectAll(); // Mong đợi danh sách trả về có size = 0, nếu không có bản ghi hợp lệ
-//        assertTrue(list.isEmpty()); // Kiểm tra danh sách trống
-//    }
+    @Test
+    public void testSelectAll_NonEmptyDatabase_TC_102() {
+        List<PhienBanSanPhamDTO> list = dao.selectAll("1"); // Mong đợi danh sách trả về có size = 0, nếu không có bản ghi hợp lệ
+        assertTrue(list.isEmpty()); // Kiểm tra danh sách trống
+    }
     
     // TC_103: Mã Id tồn tại - Kiểm tra việc chọn sản phẩm tồn tại trong cơ sở dữ liệu
     @Test
@@ -286,5 +286,72 @@ public class PhienBanSanPhamDAOTest {
         assertEquals(1, autoIncrementValue); // Mong đợi giá trị mặc định Auto Increment là 1 khi bảng trống
     }
     
+
+    @Test
+    public void testCheckImeiExists_EmptyList_TT_149() {
+        ArrayList<ChiTietSanPhamDTO> list = new ArrayList<>();
+
+        boolean result = dao.checkImeiExists(list);
+        assertTrue("Danh sách rỗng không có IMEI nào trùng, kết quả phải là true", result);
+    }
+    
+    @Test
+public void testUpdateSoLuongTon_ValidPositiveQuantity_TT_151() {
+    int maphienban = 1; // Đã tồn tại trong DB với soluongton = 10
+    int soluong = 5;
+
+    int result = dao.updateSoLuongTon(maphienban, soluong);
+
+    assertEquals("Cập nhật thành công phải trả về 1", 1, result);
+
+    PhienBanSanPhamDTO updated = dao.selectById(maphienban);
+    assertEquals("Số lượng tồn phải tăng lên 15", 15, updated.getSoluongton());
+}
+
+    @Test
+    public void testUpdateSoLuongTon_ValidNegativeQuantity_TC_102() {
+        int maphienban = 2; // Đã tồn tại trong DB với soluongton = 10
+        int soluong = -3;
+
+        int result = dao.updateSoLuongTon(maphienban, soluong);
+
+        assertEquals(1, result);
+        PhienBanSanPhamDTO updated = dao.selectById(maphienban);
+        assertEquals(7, updated.getSoluongton()); // 10 - 3 = 7
+    }
+    @Test
+    public void testUpdateSoLuongTon_InvalidMaPhienBan_TT_152() {
+        int maphienban = 9999; // Không tồn tại
+        int soluong = 5;
+
+        int result = dao.updateSoLuongTon(maphienban, soluong);
+
+        assertEquals("Không tồn tại maphienban, không được cập nhật", 0, result);
+    }
+
+    @Test
+    public void testUpdateSoLuongTon_ToZero_TT_153() {
+        int maphienban = 3; // Tồn kho hiện tại = 5
+        int soluong = -5;
+
+        int result = dao.updateSoLuongTon(maphienban, soluong);
+
+        assertEquals(1, result);
+        PhienBanSanPhamDTO updated = dao.selectById(maphienban);
+        assertEquals(0, updated.getSoluongton());
+    }
+
+    @Test
+    public void testUpdateSoLuongTon_ToZero_TT_154() {
+        int maphienban = 3; // Tồn kho hiện tại = 5
+        int soluong = -5;
+
+        int result = dao.updateSoLuongTon(maphienban, soluong);
+
+        assertEquals(1, result);
+        PhienBanSanPhamDTO updated = dao.selectById(maphienban);
+        assertEquals(0, updated.getSoluongton());
+    }
+
     
 }

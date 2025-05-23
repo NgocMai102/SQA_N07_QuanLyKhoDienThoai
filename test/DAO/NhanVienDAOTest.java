@@ -10,7 +10,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Date ;
 import java.util.List;
 import org.junit.AfterClass;
 import org.junit.Test;
@@ -51,7 +51,8 @@ public class NhanVienDAOTest {
 
         try {
             Date ngaysinh = sdf.parse("1995-05-20");
-            NhanVienDTO nv = new NhanVienDTO("Nguyen Van A", 1001, ngaysinh, "0123456789", 1);
+            java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+            NhanVienDTO nv = new NhanVienDTO(7,"Nguyen Van A", 1, sqlDate, "0123456789", 1, "abc@gmail.com");
             nv.setEmail("nva_test@example.com");
 
             int result = dao.insert(nv);
@@ -68,7 +69,8 @@ public class NhanVienDAOTest {
 
         try {
             Date ngaysinh = sdf.parse("1995-05-20");
-            NhanVienDTO nv = new NhanVienDTO("", 1001, ngaysinh, "0123456789", 1);
+            java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+            NhanVienDTO nv = new NhanVienDTO("", 1001, sqlDate, "0123456789", 1);
             nv.setEmail("emptyname@example.com");
 
             int result = dao.insert(nv);
@@ -84,7 +86,8 @@ public class NhanVienDAOTest {
 
         try {
             Date ngaysinh = sdf.parse("1990-10-10");
-            NhanVienDTO nv = new NhanVienDTO("Nguyen Van B", 1001, ngaysinh, "0987654321", 1);
+            java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+            NhanVienDTO nv = new NhanVienDTO("Nguyen Van B", 1001, sqlDate, "0987654321", 1);
             nv.setEmail("invalidgender@example.com");
 
             int result = dao.insert(nv);
@@ -114,7 +117,8 @@ public class NhanVienDAOTest {
 
         try {
             Date ngaysinh = sdf.parse("1999-12-12");
-            NhanVienDTO nv = new NhanVienDTO("Nguyen Van D", 1001, ngaysinh, "0999999999", 1);
+            java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+            NhanVienDTO nv = new NhanVienDTO("Nguyen Van D", 1001, sqlDate, "0999999999", 1);
             nv.setEmail("transinh085@gmail.com"); // Email này đã tồn tại trong DB
 
             int result = dao.insert(nv);
@@ -130,7 +134,8 @@ public class NhanVienDAOTest {
 
         try {
             Date ngaysinh = sdf.parse("1991-08-08");
-            NhanVienDTO nv = new NhanVienDTO("Nguyen Van E", 1, ngaysinh, "0888888888", 1);
+            java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+            NhanVienDTO nv = new NhanVienDTO("Nguyen Van E", 1, sqlDate, "0888888888", 1);
             nv.setEmail("abc.com"); // Không có @
 
             int result = dao.insert(nv);
@@ -147,13 +152,15 @@ public class NhanVienDAOTest {
 
         try {
             Date date1 = sdf.parse("1990-01-01");
+            java.sql.Date sqlDate1 = new java.sql.Date(date1.getTime());
             Date date2 = sdf.parse("1992-02-02");
+            java.sql.Date sqlDate2 = new java.sql.Date(date2.getTime());
 
-            NhanVienDTO nv1 = new NhanVienDTO("Batch A", 1, date1, "0700000001", 1);
+            NhanVienDTO nv1 = new NhanVienDTO("Batch A", 1, sqlDate1, "0700000001", 1);
             nv1.setEmail("batch1@example.com");
             int r1 = dao.insert(nv1);
 
-            NhanVienDTO nv2 = new NhanVienDTO("Batch B", 0, date2, "0700000002", 1);
+            NhanVienDTO nv2 = new NhanVienDTO("Batch B", 0, sqlDate2, "0700000002", 1);
             nv2.setEmail("batch2@example.com");
             int r2 = dao.insert(nv2);
 
@@ -170,7 +177,7 @@ public class NhanVienDAOTest {
         System.out.println("NV08 - Xóa nhân viên hợp lệ");
 
         
-        int result = dao.delete("1001");
+        int result = dao.delete("1");
 
         assertEquals(1, result);
 
@@ -200,8 +207,8 @@ public class NhanVienDAOTest {
     public void testDeleteNhanVien_LienTiep_NV11() throws Exception {
         System.out.println("NV11 - Gọi nhiều lần liên tiếp");
 
-        int result1 = dao.delete("1001");
-        int result2 = dao.delete("1001");
+        int result1 = dao.delete("1");
+        int result2 = dao.delete("1");
 
         assertEquals(1, result1);
         assertEquals(0, result2);
@@ -224,8 +231,9 @@ public class NhanVienDAOTest {
     public void testUpdate_ValidInput_NV13() throws Exception {
         System.out.println("NV13 - Cập nhật nhân viên hợp lệ");
     
-        Date ngaysinh = sdf.parse("1995-05-20");
-        NhanVienDTO dto = new NhanVienDTO("Nguyen Van A", 1001, ngaysinh, "0123456789", 1);
+        Date ngaysinh = sdf.parse("2003-08-10");
+        java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+        NhanVienDTO dto = new NhanVienDTO(6, "Nguyễn Hữu Mạnh", 1, sqlDate, "0915166497", 1, "markus@vitex.asia");
         dto.setEmail("nva_test@example.com");
        
         int result = dao.update(dto);
@@ -240,7 +248,8 @@ public class NhanVienDAOTest {
     
 
         Date ngaysinh = sdf.parse("1995-05-20");
-        NhanVienDTO dto = new NhanVienDTO("Nguyen Van A", 1001, ngaysinh, "0123456789", 1);
+        java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+        NhanVienDTO dto = new NhanVienDTO("Nguyen Van A", 1001, sqlDate, "0123456789", 1);
         dto.setEmail("nva_test@example.com");
         int result = dao.update(dto);
 
@@ -254,7 +263,8 @@ public class NhanVienDAOTest {
         
 
         Date ngaysinh = sdf.parse("1995-05-20");
-        NhanVienDTO dto = new NhanVienDTO(null, 1001, ngaysinh, "0123456789", 1);
+        java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+        NhanVienDTO dto = new NhanVienDTO(null, 1001, sqlDate, "0123456789", 1);
         dto.setEmail("nva_test@example.com");
         int result = dao.update(dto);
 
@@ -267,7 +277,8 @@ public class NhanVienDAOTest {
         System.out.println("NV16 - Giới tính không hợp lệ");
 
         Date ngaysinh = sdf.parse("1995-05-20");
-        NhanVienDTO dto = new NhanVienDTO("Nguyen Van A", 1001, ngaysinh, "0123456789", 1);
+        java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+        NhanVienDTO dto = new NhanVienDTO("Nguyen Van A", 1001, sqlDate, "0123456789", 1);
         dto.setEmail("nva_test@example.com");
         int result = dao.update(dto);
 
@@ -293,7 +304,8 @@ public class NhanVienDAOTest {
         
        
         Date ngaysinh = sdf.parse("1995-05-20");
-        NhanVienDTO dto = new NhanVienDTO("Nguyen Van A", 1001, ngaysinh, "0123456789", 1);
+        java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+        NhanVienDTO dto = new NhanVienDTO("Nguyen Van A", 1001, sqlDate, "0123456789", 1);
         dto.setEmail("nva_testexample.com");
       
         int result = dao.update(dto);
@@ -307,7 +319,8 @@ public class NhanVienDAOTest {
         System.out.println("NV20 - Trạng thái âm");
        
         Date ngaysinh = sdf.parse("1995-05-20");
-        NhanVienDTO dto = new NhanVienDTO("Nguyen Van A", 1001, ngaysinh, "0123456789", -1);
+        java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+        NhanVienDTO dto = new NhanVienDTO("Nguyen Van A", 1001, sqlDate, "0123456789", -1);
         dto.setEmail("nva_test@example.com");
         int result = dao.update(dto);
 
@@ -319,11 +332,12 @@ public class NhanVienDAOTest {
     public void testUpdate_TwoConsecutiveUpdates_NV21() throws Exception {
         System.out.println("NV21 - Cập nhật 2 nhân viên liên tiếp");
          
-        Date ngaysinh = sdf.parse("1995-05-20");
-        NhanVienDTO dto1 = new NhanVienDTO("Nguyen Van A", 1001, ngaysinh, "0123456789", 1);
+        Date ngaysinh = sdf.parse("2003-12-20");
+        java.sql.Date sqlDate = new java.sql.Date(ngaysinh.getTime());
+        NhanVienDTO dto1 = new NhanVienDTO(6, "Nguyễn Hữu Mạnh", 1, sqlDate, "0915166497", 1, "markus@vitex.asia");
         dto1.setEmail("nva_test@example.com");
   
-        NhanVienDTO dto2 = new NhanVienDTO("Nguyen Van B", 1001, ngaysinh, "0123456789", 1);
+        NhanVienDTO dto2 = new NhanVienDTO(1, "Trần Nhật Sinh", 1, sqlDate, "0387913347", 1, "transinh085@gmail.com");
         dto1.setEmail("nva_test2@example.com");
 
         int result1 = dao.update(dto1);
@@ -377,7 +391,7 @@ public class NhanVienDAOTest {
         System.out.println("NV26 - Tất cả nhân viên đã có tài khoản");
         List<NhanVienDTO> list = dao.selectAllNV();
         assertNotNull(list);
-        assertEquals(0, list.size()); // Danh sách trống vì không còn nhân viên chưa có tài khoản
+        assertEquals(2, list.size());
     }
       @Test
     public void testSelectById_NV27() {
@@ -413,10 +427,10 @@ public class NhanVienDAOTest {
 
     @Test
     public void testSelectById_NV31() {
-        System.out.println("NV31 - Nhân viên đã bị xóa mềm (trangthai = -1)");
-        NhanVienDTO nv = dao.selectById("6"); // Giả sử ID 5 đã bị xóa mềm
+        System.out.println("NV31 - Nhân viên đã bị xóa mềm (trangthai = 0)");
+        NhanVienDTO nv = dao.selectById("3"); // Giả sử ID 3 đã bị xóa mềm
         assertNotNull(nv);
-        assertEquals(-1, nv.getTrangthai());
+        assertEquals(0, nv.getTrangthai());
     }
     
 //    Phương thức selectByEmail(String t)

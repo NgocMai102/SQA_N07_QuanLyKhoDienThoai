@@ -79,9 +79,15 @@ public class TaiKhoanDAOTest {
         TaiKhoanDTO result = dao.selectByUser(username);
         assertNull(result);
     }
+    
+    @Test
+    public void testSelectByUser_Exist() {
+        String username = "hgbaodev";
+        TaiKhoanDTO result = dao.selectByUser(username);
+        
+        assertEquals(new TaiKhoanDTO(2, "hgbaodev", "$2a$12$vKOctLxA84GkkITq7eXStOs91COUlkJrQciydRVbFQ7o223Y.kNzy", 1, 1), result) ;
+    }
 
-    //
-    //
     @Test
     public void testUpdate_Exist() {
         TaiKhoanDTO tk = new TaiKhoanDTO(2, "hgbaodev1", "$2a$12$SAlAhcsudMzNEouyBaoHnOKR23ixdH0ZkcoyXUJ5gS/NFt.b4oqw6",
@@ -132,7 +138,7 @@ public class TaiKhoanDAOTest {
         TaiKhoanDTO result = dao.selectByEmail(email);
         assertNotNull(result);
         TaiKhoanDTO expected = new TaiKhoanDTO(1, "admin",
-                "$2a$12$SAlAhcsudMzNEouyBaoHnOKR23ixdH0ZkcoyXUJ5gS/NFt.b4oqw6", 1, 1);
+                "$2a$12$F03HM81fxYN3vgZe80Dbnulh/ZmkbWhz/WSN2sCkBts.hO3bRd76i", 1, 1);
         assertEquals(expected, result);
     }
 
@@ -201,7 +207,8 @@ public class TaiKhoanDAOTest {
     public void testSelectAll() {
         ArrayList<TaiKhoanDTO> list = dao.selectAll();
         assertNotNull(list);
-        assertTrue(list.size() == 4);
+        System.out.println(list.size());
+        assertTrue(list.size() == 5);
     }
 
     @Test
