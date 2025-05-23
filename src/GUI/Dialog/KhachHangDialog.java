@@ -35,6 +35,11 @@ public class KhachHangDialog extends JDialog implements MouseListener {
         PlainDocument phonex = (PlainDocument)sdtKH.getTxtForm().getDocument();
         phonex.setDocumentFilter((new NumericDocumentFilter()));
         diachiKH = new InputForm("Địa chỉ");
+        
+        tenKH.getTxtForm().setName("txtForm_Tên khách hàng");
+        sdtKH.getTxtForm().setName("txtForm_Số điện thoại");
+        diachiKH.getTxtForm().setName("txtForm_Địa chỉ");
+        
         initComponents(title, type);
     }
 
@@ -49,6 +54,11 @@ public class KhachHangDialog extends JDialog implements MouseListener {
         setSdtKH(kh.getSdt());
         diachiKH = new InputForm("Địa chỉ");
         setDiaChiKH(kh.getDiachi());
+        
+        tenKH.getTxtForm().setName("txtForm_Tên khách hàng");
+        sdtKH.getTxtForm().setName("txtForm_Số điện thoại");
+        diachiKH.getTxtForm().setName("txtForm_Địa chỉ");
+        
         this.jpKH = jpKH;
         initComponents(title, type);
     }
@@ -95,7 +105,7 @@ public class KhachHangDialog extends JDialog implements MouseListener {
         this.add(pnlMain, BorderLayout.CENTER);
         this.add(pnlButtom, BorderLayout.SOUTH);
         this.setLocationRelativeTo(null);
-        this.setVisible(true);
+//        this.setVisible(true);
     }
 
     public void setTenKH(String name) {
